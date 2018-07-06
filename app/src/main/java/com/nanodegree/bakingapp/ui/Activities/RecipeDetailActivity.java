@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     private boolean mTabletLayout;
     int mCurrentStepPosition = 0;
 
+    private final String TAG = RecipeDetailActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
         if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPES)) {
             data = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_RECIPES));
+            Log.d(TAG,"data>:" + data.toString());
 
             ArrayList<RecipeIngredientsRequest> mRecipeIngredientArrayList = data.getIngredientsRequest();
             RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
@@ -89,10 +93,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
             } else {
                 mCollapsingToolbarLayout.setTitle(data.getRecipeName());
                 ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
-                itemRecipeStepFragment.setRecipeStep(data.getStepsRequest().get(mCurrentStepPosition));
+                itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
+                itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
                 itemRecipeStepFragment.setRecipeName(data.getRecipeName());
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
+                        .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
                         .commit();
             }
 
@@ -124,15 +129,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
     @Override
     public void onRecipeSelected(int position) {
+        mCurrentStepPosition = position;
         if (!mTabletLayout) {
             Intent forStepDetailIntent = new Intent(this, RecipeStepDetailActivity.class);
-            forStepDetailIntent.putExtra(EXTRA_RECIPES_STEP, Parcels.wrap(data.getStepsRequest().get(position)));
+            forStepDetailIntent.putExtra(EXTRA_RECIPES_STEP, Parcels.wrap(data.getStepsRequest()));
             forStepDetailIntent.putExtra(EXTRA_RECIPE_NAME, data.getRecipeName());
+            forStepDetailIntent.putExtra(EXTRA_STEP_POSITION,mCurrentStepPosition);
             startActivity(forStepDetailIntent);
         }else {
-            mCurrentStepPosition = position;
             ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
-            itemRecipeStepFragment.setRecipeStep(data.getStepsRequest().get(position));
+            itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
+            itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
             itemRecipeStepFragment.setRecipeName(data.getRecipeName());
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)

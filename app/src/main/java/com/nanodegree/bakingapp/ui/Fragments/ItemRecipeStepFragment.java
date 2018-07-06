@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +38,14 @@ import com.nanodegree.bakingapp.util.RecipeImages;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES_STEP;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPE_NAME;
+import static com.nanodegree.bakingapp.model.Contracts.EXTRA_STEP_POSITION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,8 +63,9 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
     @BindView(R.id.recipe_step_no_video_text_view)
     TextView mRecipeNoVideoTextView;
 
-    private RecipeStepsRequest mRecipeStep;
+    private ArrayList<RecipeStepsRequest> mRecipeStepsArrayList;
     private String mRecipeName;
+    private int mRecipeStepPosition;
 
 
     private SimpleExoPlayer mExoPlayer;
@@ -86,8 +91,9 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
         View view = inflater.inflate(R.layout.fragment_item_recipe_step, container, false);
         ButterKnife.bind(this, view);
         if (savedInstanceState != null) {
-            mRecipeStep = Parcels.unwrap(savedInstanceState.getParcelable(EXTRA_RECIPES_STEP));
+            mRecipeStepsArrayList = Parcels.unwrap(savedInstanceState.getParcelable(EXTRA_RECIPES_STEP));
             mRecipeName = savedInstanceState.getString(EXTRA_RECIPE_NAME);
+            mRecipeStepPosition = savedInstanceState.getInt(EXTRA_STEP_POSITION);
             mPlayWhenReady = savedInstanceState.getBoolean(RECIPE_STEP_VIDEO_STATE);
             mCurrentPlayPosition = savedInstanceState.getLong(RECIPE_STEP_VIDEO_POSITION);
         }
@@ -98,23 +104,24 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecipeStepShortDescriptionTextView.setText(mRecipeStep.getStepShortDescription());
-        mRecipeStepFullDescriptionTextView.setText(mRecipeStep.getStepDescription());
+        mRecipeStepShortDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepShortDescription());
+        mRecipeStepFullDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepDescription());
 
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), RecipeImages.getImageDrawable(mRecipeName)));
 
-        if (mRecipeStep.getStepVideoUrl().isEmpty()) {
+        if (mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl().isEmpty()) {
             mRecipeNoVideoTextView.setVisibility(View.VISIBLE);
 
         } else {
 //            initializeMediaSession();
-            initializePlayer(Uri.parse(mRecipeStep.getStepVideoUrl()));
+            initializePlayer(Uri.parse(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl()));
         }
     }
 
-    public void setRecipeStep(RecipeStepsRequest mRecipeStep) {
-        this.mRecipeStep = mRecipeStep;
+    public void setRecipeStepsArrayList(ArrayList<RecipeStepsRequest> mRecipeStepsArrayList) {
+        this.mRecipeStepsArrayList = mRecipeStepsArrayList;
+        Log.d(TAG,"Size>" + mRecipeStepsArrayList.size());
     }
 
     public void setRecipeName(String mRecipeName) {
@@ -122,12 +129,17 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
 
     }
 
+    public void setRecipeStepPosition(int mRecipeStepPosition){
+        this.mRecipeStepPosition = mRecipeStepPosition;
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mRecipeStep != null) {
-            outState.putParcelable(EXTRA_RECIPES_STEP, Parcels.wrap(mRecipeStep));
+        if (mRecipeStepsArrayList != null) {
+            outState.putParcelable(EXTRA_RECIPES_STEP, Parcels.wrap(mRecipeStepsArrayList));
             outState.putString(EXTRA_RECIPE_NAME,mRecipeName);
+            outState.putInt(EXTRA_STEP_POSITION,mRecipeStepPosition);
         }
 
         if (mExoPlayer != null) {

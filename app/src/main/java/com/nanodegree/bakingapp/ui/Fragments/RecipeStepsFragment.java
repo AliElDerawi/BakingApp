@@ -3,6 +3,7 @@ package com.nanodegree.bakingapp.ui.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,8 @@ public class RecipeStepsFragment extends Fragment {
     private ArrayList<RecipeStepsRequest> mRecipeStepsArrayList;
 
     private OnRecipeSelectedListener onRecipeSelectedListener;
+
+    private final String RECYCLER_STATE_POSITION = "recyclerViewState";
 
     public interface OnRecipeSelectedListener {
         void onRecipeSelected(int position);
@@ -67,6 +70,10 @@ public class RecipeStepsFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+        if (savedInstanceState != null){
+            Parcelable state = savedInstanceState.getParcelable(RECYCLER_STATE_POSITION);
+            linearLayoutManager.onRestoreInstanceState(state);
+        }
         mRecipeStepsRecyclerView.setLayoutManager(linearLayoutManager);
         RecipeStepsAdapter recipeStepsAdapter = new RecipeStepsAdapter(mRecipeStepsArrayList, new OnItemClickListener() {
             @Override
@@ -80,5 +87,13 @@ public class RecipeStepsFragment extends Fragment {
 
     public void setStepRecipeStepArrayList(ArrayList<RecipeStepsRequest> mRecipeStepsArrayList) {
         this.mRecipeStepsArrayList = mRecipeStepsArrayList;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRecipeStepsRecyclerView != null){
+            outState.putParcelable(RECYCLER_STATE_POSITION,mRecipeStepsRecyclerView.getLayoutManager().onSaveInstanceState());
+        }
     }
 }
