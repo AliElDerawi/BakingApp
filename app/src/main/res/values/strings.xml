@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">BakingApp</string>
+
+    <string name="sorry_error_happen">Sorry some error happen ! Please try again later</string>
+    <string name="no_internet_connection_layout">No Internet Connection Layout</string>
+    <string name="no_internet_message">Check your internet connection and try again</string>
+    <string name="btn_try_again">TRY AGAIN</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
