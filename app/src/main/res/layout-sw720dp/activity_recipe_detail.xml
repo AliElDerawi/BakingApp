@@ -58,7 +58,7 @@
         >
 
         <include layout="@layout/activity_recipe_detail_content"
-            android:layout_width="250dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             />

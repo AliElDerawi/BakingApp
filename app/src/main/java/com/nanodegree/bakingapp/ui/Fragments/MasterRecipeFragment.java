@@ -83,6 +83,8 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),
                 getResources().getInteger(R.integer.column_span));
 

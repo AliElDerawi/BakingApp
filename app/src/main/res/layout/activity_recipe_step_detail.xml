@@ -9,6 +9,7 @@
     tools:context=".ui.Activities.RecipeStepDetailActivity"
     android:layout_margin="0dp"
     android:padding="0dp"
+    android:fitsSystemWindows="true"
     >
 
     <RelativeLayout
