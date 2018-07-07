@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/recipe_name_text_view"
                 android:textColor="@color/colorAccent"
-                android:text="Nuttela Pie"
+                android:text="@string/recipe_name"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                 android:layout_marginBottom="2dp"
                 />
@@ -34,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/colorSecondaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:text="(Serving : "
+                android:text="@string/recipe_serving"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
@@ -45,7 +45,7 @@
                 android:id="@+id/recipe_servings_text_view"
                 android:textColor="@color/colorSecondaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:text="4"
+                android:text="@string/recipe_serving_number"
                 android:gravity="center"
                 android:textStyle="bold"
                 />
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ingredients"
+                    android:text="@string/recipe_ingredients_title"
                     android:textStyle="bold"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:gravity="center"
@@ -116,7 +116,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Steps"
+                    android:text="@string/recipe_steps_title"
                     android:textStyle="bold"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:gravity="center"

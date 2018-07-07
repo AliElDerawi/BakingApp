@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  */
 public class RecipeIngredientsFragment extends Fragment {
 
-    final String TAG  = RecipeIngredientsFragment.class.getSimpleName();
+    private final String TAG  = RecipeIngredientsFragment.class.getSimpleName();
 
     @BindView(R.id.recipe_ingredients_recycler_view)
     RecyclerView mRecipeIngredientsRecyclerView;

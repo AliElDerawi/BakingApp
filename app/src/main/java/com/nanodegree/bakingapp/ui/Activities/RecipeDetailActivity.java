@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.RecipesResult;
 import com.nanodegree.bakingapp.model.request.RecipeIngredientsRequest;
 import com.nanodegree.bakingapp.model.request.RecipeStepsRequest;
+import com.nanodegree.bakingapp.ui.Fragments.ItemRecipeStepFragment;
 import com.nanodegree.bakingapp.ui.Fragments.RecipeIngredientsFragment;
 import com.nanodegree.bakingapp.ui.Fragments.RecipeStepsFragment;
 import com.nanodegree.bakingapp.util.GlideApp;
@@ -28,6 +30,7 @@ import butterknife.ButterKnife;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES_STEP;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPE_NAME;
+import static com.nanodegree.bakingapp.model.Contracts.EXTRA_STEP_POSITION;
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeStepsFragment.OnRecipeSelectedListener {
 
@@ -45,6 +48,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     private RecipesResult data;
+    private boolean mTabletLayout;
+    private int mCurrentStepPosition = 0;
+
+    private final String TAG = RecipeDetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,30 +61,52 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPES)){
+        if (findViewById(R.id.my_tablet_layout) != null) {
+            mTabletLayout = true;
+        }
+
+        if (savedInstanceState != null){
+            mCurrentStepPosition = savedInstanceState.getInt(EXTRA_STEP_POSITION);
+        }
+
+        if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPES)) {
             data = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_RECIPES));
+            Log.d(TAG,"data>:" + data.toString());
 
             ArrayList<RecipeIngredientsRequest> mRecipeIngredientArrayList = data.getIngredientsRequest();
             RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
             recipeIngredientsFragment.setRecipeIngredientsArrayList(mRecipeIngredientArrayList);
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_ingredients_fragment,recipeIngredientsFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.recipe_ingredients_fragment, recipeIngredientsFragment).commit();
 
             ArrayList<RecipeStepsRequest> mRecipeStepsArrayList = data.getStepsRequest();
             RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
             recipeStepsFragment.setStepRecipeStepArrayList(mRecipeStepsArrayList);
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps_fragment,recipeStepsFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps_fragment, recipeStepsFragment).commit();
 
             mRecipeNameTextView.setText(data.getRecipeName());
-            prepareScreenTitle();
-
-            int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
-            GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
             mRecipeServingTextView.setText(String.valueOf(data.getRecipeServing()));
+
+            if (!mTabletLayout) {
+                prepareScreenTitle();
+                int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
+                GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
+            } else {
+//                mCollapsingToolbarLayout.setTitle(data.getRecipeName());
+                getSupportActionBar().setTitle(data.getRecipeName());
+                mToolbar.setTitle(data.getRecipeName());
+                ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
+                itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
+                itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
+                itemRecipeStepFragment.setRecipeName(data.getRecipeName());
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
+                        .commit();
+            }
 
         }
     }
 
-    private void prepareScreenTitle(){
+    private void prepareScreenTitle() {
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
@@ -102,9 +131,29 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
     @Override
     public void onRecipeSelected(int position) {
-        Intent forStepDetailIntent = new Intent(this, RecipeStepDetailActivity.class);
-        forStepDetailIntent.putExtra(EXTRA_RECIPES_STEP, Parcels.wrap(data.getStepsRequest().get(position)));
-        forStepDetailIntent.putExtra(EXTRA_RECIPE_NAME,data.getRecipeName());
-        startActivity(forStepDetailIntent);
+        mCurrentStepPosition = position;
+        if (!mTabletLayout) {
+            Intent forStepDetailIntent = new Intent(this, RecipeStepDetailActivity.class);
+            forStepDetailIntent.putExtra(EXTRA_RECIPES_STEP, Parcels.wrap(data.getStepsRequest()));
+            forStepDetailIntent.putExtra(EXTRA_RECIPE_NAME, data.getRecipeName());
+            forStepDetailIntent.putExtra(EXTRA_STEP_POSITION,mCurrentStepPosition);
+            startActivity(forStepDetailIntent);
+        }else {
+            ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
+            itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
+            itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
+            itemRecipeStepFragment.setRecipeName(data.getRecipeName());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mCurrentStepPosition != 0){
+            outState.putInt(EXTRA_STEP_POSITION,mCurrentStepPosition);
+        }
     }
 }

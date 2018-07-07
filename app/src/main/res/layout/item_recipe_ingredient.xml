@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipe_ingredient_quantity_text_view"
         android:textColor="@color/colorSecondaryText"
-        android:text="1"
+        android:text="@string/recipe_ingredient_quantity"
         android:layout_marginEnd="2dp"
         />
 
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipe_ingredient_measure_text_view"
         android:textColor="@color/colorSecondaryText"
-        android:text="K"
+        android:text="@string/recipe_ingredient_measure"
         />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recipe_ingredient_text_view"
-        android:text="Nutella or other chocolate spread"
+        android:text="@string/recipe_ingredient"
         android:textColor="@color/colorSecondaryText"
         />
 

@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:context=".ui.Activities.RecipeStepDetailActivity"
     android:layout_margin="0dp"
     android:padding="0dp"
+    android:fitsSystemWindows="true"
+    android:layout_weight="3"
+    android:background="@color/colorScreen"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        android:id="@+id/toolbar_layout"
         >
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -33,7 +36,72 @@
     <FrameLayout
         android:id="@+id/recipe_step_detail_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
         />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:id="@+id/navigation_layout"
+        >
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:id="@+id/previous_step_layout"
+            android:layout_alignParentStart="true"
+            android:layout_alignStart="@+id/next_step_layout"
+            >
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:srcCompat="@drawable/ic_arrow_left"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/previous_btn"
+                android:textSize="17sp"
+                android:textColor="@color/colorSecondaryText"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="1dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:id="@+id/next_step_layout"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next_btn"
+                android:textSize="17sp"
+                android:textColor="@color/colorSecondaryText"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="1dp"
+                />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:srcCompat="@drawable/ic_arrow_right"
+                />
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 </LinearLayout>

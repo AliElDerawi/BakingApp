@@ -1,6 +1,7 @@
 package com.nanodegree.bakingapp.ui.Adapters;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,11 +52,13 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         TextView mRecipeStepNumber;
         @BindView(R.id.recipe_step_short_description_text_view)
         TextView mRecipeStepShortDescription;
+        @BindView(R.id.my_recipe_step_layout)
+        CardView mRecipeLayout;
 
         public viewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            itemView.setOnClickListener(this);
+            mRecipeLayout.setOnClickListener(this);
         }
 
         @Override

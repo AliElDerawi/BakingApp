@@ -24,10 +24,12 @@ ext {
     supportLibVersion = '27.1.1'
     butterKnifeVersion = '8.8.1'
     gsonVersion = '2.8.2'
-    retrofitVersion = '2.3.0'
     glideVersion = '4.7.1'
     jUnitVersion = '4.12'
-    espressoCoreVersion = '3.0.1'
+    espressoCoreVersion = '3.0.2'
+    parecelerVersion = '1.1.10'
+    exoplayerVersion = '2.7.3'
+
 }
 
 dependencies {
@@ -36,10 +38,14 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
-    implementation 'com.android.support:support-v4:27.1.1'
-    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    testImplementation "junit:junit:${jUnitVersion}"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoCoreVersion}"
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}";
+    androidTestCompile "com.android.support:recyclerview-v7:${supportLibVersion}";
+    androidTestCompile "com.android.support.test.espresso:espresso-contrib:${espressoCoreVersion}"
 
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation "com.android.support:cardview-v7:${supportLibVersion}"
@@ -50,13 +56,13 @@ dependencies {
     implementation "com.jakewharton:butterknife:${butterKnifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
 
-    implementation 'org.parceler:parceler-api:1.1.10'
-    annotationProcessor 'org.parceler:parceler:1.1.10'
+    implementation "org.parceler:parceler-api:${parecelerVersion}"
+    annotationProcessor "org.parceler:parceler:${parecelerVersion}"
 
     implementation 'com.android.volley:volley:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.google.code.gson:gson:${gsonVersion}"
 
-    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    implementation "com.google.android.exoplayer:exoplayer:${exoplayerVersion}"
 
 
 }
