@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES_STEP;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPE_NAME;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_STEP_POSITION;
+import static com.nanodegree.bakingapp.util.shareMethod.showSnackBar;
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeStepsFragment.OnRecipeSelectedListener {
 
@@ -46,6 +49,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     Toolbar mToolbar;
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @BindView(R.id.fab)
+    FloatingActionButton mFabButton;
 
     private RecipesResult data;
     private boolean mTabletLayout;
@@ -90,8 +95,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
                 prepareScreenTitle();
                 int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
                 GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
+                mFabButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showSnackBar(view.getContext(),view,getResources().getString(R.string.fab_not_implemented));
+                    }
+                });
             } else {
 //                mCollapsingToolbarLayout.setTitle(data.getRecipeName());
+                mFabButton.setVisibility(View.GONE);
                 getSupportActionBar().setTitle(data.getRecipeName());
                 mToolbar.setTitle(data.getRecipeName());
                 ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
@@ -107,6 +119,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     }
 
     private void prepareScreenTitle() {
+
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;

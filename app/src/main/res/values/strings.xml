@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BakingApp</string>
+    <string name="app_name">Baking App</string>
 
     <string name="sorry_error_happen">Sorry some error happen ! Please try again later</string>
     <string name="no_internet_connection_layout">No Internet Connection Layout</string>
@@ -23,5 +23,6 @@
     <string name="recipe_step_number">1</string>
     <string name="recipe_step">Press the crust into baking form.</string>
     <string name="no_recipe_available_title">No Recipe Available Yet ~</string>
+    <string name="fab_not_implemented">Not implemented Yet ~</string>
 
 </resources>
