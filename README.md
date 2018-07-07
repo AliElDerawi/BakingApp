@@ -69,12 +69,13 @@ SnapShots from the app:
 
 * Tablet Screens:
 
+
 <p align="center">
-<img src="./images/tablet_recipe_main.png" width="590" height="350" />
+<img src="./images/tablet_recipe_main.jpg" width="590" height="350" />
 </p>
 
 <p align="center">
-<img src="./images/tablet_recipe_detail_port.png" width="400" height="550" />
+<img src="./images/tablet_recipe_detail_port.jpg" width="400" height="550" />
 </p>
 
 
