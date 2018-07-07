@@ -7,6 +7,7 @@ Main features of this realese are:
 * Ability to watch video for recipes steps inside the app and in  **Full Screen mode**
 * Full support for Landscape and Portrait oreintiation.
 * Support For Tablet devices.
+* Use Master and Detail fragment concepts.
 
 
 What External library used:
