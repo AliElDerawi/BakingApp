@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ui.Activities.RecipeDetailActivity"
-    android:layoutDirection="ltr"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -58,7 +57,7 @@
         >
 
         <include layout="@layout/activity_recipe_detail_content"
-            android:layout_width="250dp"
+            android:layout_width="@dimen/two_pane_width"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             />

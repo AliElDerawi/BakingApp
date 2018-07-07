@@ -39,7 +39,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
     @BindView(R.id.next_step_layout)
     LinearLayout mNextStepLayout;
     private String mRecipeName = "";
-    int mCurrentStepPosition;
+    private int mCurrentStepPosition;
     private ArrayList<RecipeStepsRequest> mRecipeStepsArrayList;
     private final String TAG = RecipeStepDetailActivity.class
             .getSimpleName();

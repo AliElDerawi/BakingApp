@@ -8,5 +8,20 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="recipe_name">Nuttela Pie</string>
+    <string name="recipe_serving">(Serving :</string>
+    <string name="recipe_serving_number">4</string>
+    <string name="recipe_ingredients_title">Ingredients</string>
+    <string name="recipe_steps_title">Steps</string>
+    <string name="previous_btn">Prev</string>
+    <string name="next_btn">Next</string>
+    <string name="recipe_ingredient_quantity">1</string>
+    <string name="recipe_ingredient_measure">K</string>
+    <string name="recipe_ingredient">Nutella or other chocolate spread</string>
+    <string name="recipe_step_number">1</string>
+    <string name="recipe_step">Press the crust into baking form.</string>
+    <string name="no_recipe_available_title">No Recipe Available Yet ~</string>
 
 </resources>

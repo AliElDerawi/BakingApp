@@ -49,7 +49,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
     private RecipesResult data;
     private boolean mTabletLayout;
-    int mCurrentStepPosition = 0;
+    private int mCurrentStepPosition = 0;
 
     private final String TAG = RecipeDetailActivity.class.getSimpleName();
 
@@ -91,7 +91,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
                 int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
                 GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
             } else {
-                mCollapsingToolbarLayout.setTitle(data.getRecipeName());
+//                mCollapsingToolbarLayout.setTitle(data.getRecipeName());
+                getSupportActionBar().setTitle(data.getRecipeName());
+                mToolbar.setTitle(data.getRecipeName());
                 ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
                 itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
                 itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);

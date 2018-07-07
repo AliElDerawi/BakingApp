@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:context=".ui.Activities.RecipeStepDetailActivity"
     android:layout_margin="0dp"
     android:padding="0dp"
     android:fitsSystemWindows="true"
     android:layout_weight="3"
+    android:background="@color/colorScreen"
     >
 
     <RelativeLayout
@@ -54,6 +54,7 @@
             android:gravity="center"
             android:id="@+id/previous_step_layout"
             android:layout_alignParentStart="true"
+            android:layout_alignStart="@+id/next_step_layout"
             >
             <ImageView
                 android:layout_width="32dp"
@@ -64,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prev"
+                android:text="@string/previous_btn"
                 android:textSize="17sp"
                 android:textColor="@color/colorSecondaryText"
                 android:textStyle="bold"
@@ -85,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next"
+                android:text="@string/next_btn"
                 android:textSize="17sp"
                 android:textColor="@color/colorSecondaryText"
                 android:textStyle="bold"
