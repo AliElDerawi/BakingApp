@@ -4,7 +4,7 @@ Baking app is an app for making baking recipes , it has been developed for **Goo
 Main features of this realese are:
 * Abllitiy to show some baking recipes provided from Udacity’s resident baker-in-chief, Miriam.
 * Ability to read more information about available recipes include (Ingredients and Steps).
-* Ability to watch video for recipes steps inside the app and in Full Screen mode.
+* Ability to watch video for recipes steps inside the app and in  **Full Screen mode**
 * Full support for Landscape and Portrait oreintiation.
 * Support For Tablet devices.
 
