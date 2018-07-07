@@ -46,29 +46,37 @@ SnapShots from the app:
 
 * Phone Screens (Landscape):
 
-  <img src="./images/phone_main_land.png" width="300" height="530" />
-  <img src="./images/phone_recipe_land.png" width="300" height="530" />
-  <img src="./images/phone_step_land.png" width="300" height="530" />
+<p align="center">
+  <img src="./images/phone_main_land.png" width="530" height="300" />
+</p>
 
-* No Internet Screen:
+<p align="center">
+ <img src="./images/phone_recipe_land.png" width="530" height="300" />
+</p>
+
+<p align="center">
+ <img src="./images/phone_step_land.png" width="530" height="300" />
+</p>
+
+
+* No Internet and Widget Screen:
 
 <p align="center">
   <img src="./images/phone_no_internet_port.png" width="300" height="530" />
+  <img src="./images/phone_recipe_widget.png" width="300" height="530" />
 </p>
 
 
 * Tablet Screens:
 
 <p align="center">
-<img src="./images/tablet_recipe_main.png" width="300" height="530" />
-<img src="./images/tablet_recipe_detail_port.png" width="300" height="530" />
+<img src="./images/tablet_recipe_main.png" width="530" height="300" />
 </p>
-
-* Widget Screen:
 
 <p align="center">
-<img src="./images/phone_recipe_widget.png" width="300" height="530" />
+<img src="./images/tablet_recipe_detail_port.png" width="500" height="600" />
 </p>
+
 
 
 
