@@ -32,7 +32,6 @@ public class RecipeIngredientsFragment extends Fragment {
 
     private ArrayList<RecipeIngredientsRequest> mRecipeIngredientArrayList;
 
-
     public RecipeIngredientsFragment() {
         // Required empty public constructor
     }

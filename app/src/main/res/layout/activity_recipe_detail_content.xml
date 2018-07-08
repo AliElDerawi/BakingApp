@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:showIn="@layout/activity_recipe_detail"
+    android:id="@+id/recipe_detail_layout"
     >
 
     <LinearLayout

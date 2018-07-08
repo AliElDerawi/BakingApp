@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -35,6 +37,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.request.RecipeStepsRequest;
+import com.nanodegree.bakingapp.util.GlideApp;
 import com.nanodegree.bakingapp.util.RecipeImages;
 
 import org.parceler.Parcels;
@@ -63,6 +66,8 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
     SimpleExoPlayerView mPlayerView;
     @BindView(R.id.recipe_step_no_video_text_view)
     TextView mRecipeNoVideoTextView;
+    @BindView(R.id.recipe_step_thumbnail_image_view)
+    ImageView mRecipeStepThumbnail;
 
     private ArrayList<RecipeStepsRequest> mRecipeStepsArrayList;
     private String mRecipeName;
@@ -73,11 +78,14 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
 
-    private boolean mPlayWhenReady = true;
+    private boolean mPlayWhenReady ;
     private long mCurrentPlayPosition;
+    private int mPlayStartWindow;
 
     private static final String RECIPE_STEP_VIDEO_STATE = "video_state";
     private static final String RECIPE_STEP_VIDEO_POSITION = "video_position";
+    private static final String RECIPE_STEP_VIDEO_WINDOW = "video_window";
+    private static final String RECIPE_STEP_VIDEO_TRACK_SELECTOR = "video_track_selector";
     private final String TAG = ItemRecipeStepFragment.class.getSimpleName();
 
     public ItemRecipeStepFragment() {
@@ -97,9 +105,27 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
             mRecipeStepPosition = savedInstanceState.getInt(EXTRA_STEP_POSITION);
             mPlayWhenReady = savedInstanceState.getBoolean(RECIPE_STEP_VIDEO_STATE);
             mCurrentPlayPosition = savedInstanceState.getLong(RECIPE_STEP_VIDEO_POSITION);
+            mPlayStartWindow = savedInstanceState.getInt(RECIPE_STEP_VIDEO_WINDOW);
+
+        } else {
+            clearStartPosition();
         }
         return view;
 
+    }
+
+    private void updateStartPosition() {
+        if (mExoPlayer != null) {
+            mPlayWhenReady = mExoPlayer.getPlayWhenReady();
+            mPlayStartWindow = mExoPlayer.getCurrentWindowIndex();
+            mCurrentPlayPosition = Math.max(0, mExoPlayer.getContentPosition());
+        }
+    }
+
+    private void clearStartPosition() {
+        mPlayWhenReady = true;
+        mPlayStartWindow = C.INDEX_UNSET;
+        mCurrentPlayPosition = C.TIME_UNSET;
     }
 
     @Override
@@ -108,21 +134,27 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
         mRecipeStepShortDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepShortDescription());
         mRecipeStepFullDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepDescription());
 
-        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                (getResources(), RecipeImages.getImageDrawable(mRecipeName)));
 
         if (mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl().isEmpty()) {
             mRecipeNoVideoTextView.setVisibility(View.VISIBLE);
+            mPlayerView.setVisibility(View.GONE);
+            mRecipeStepThumbnail.setVisibility(View.VISIBLE);
+            GlideApp.with(this).load(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepThumbnailURL()).error(RecipeImages.getImageDrawable(mRecipeName)).into(mRecipeStepThumbnail);
 
         } else {
 //            initializeMediaSession();
+            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                    (getResources(), RecipeImages.getImageDrawable(mRecipeName)));
+            mRecipeStepThumbnail.setVisibility(View.GONE);
+            mRecipeNoVideoTextView.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.VISIBLE);
             initializePlayer(Uri.parse(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl()));
         }
     }
 
     public void setRecipeStepsArrayList(ArrayList<RecipeStepsRequest> mRecipeStepsArrayList) {
         this.mRecipeStepsArrayList = mRecipeStepsArrayList;
-        Log.d(TAG,"Size>" + mRecipeStepsArrayList.size());
+        Log.d(TAG, "Size>" + mRecipeStepsArrayList.size());
     }
 
     public void setRecipeName(String mRecipeName) {
@@ -130,7 +162,7 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
 
     }
 
-    public void setRecipeStepPosition(int mRecipeStepPosition){
+    public void setRecipeStepPosition(int mRecipeStepPosition) {
         this.mRecipeStepPosition = mRecipeStepPosition;
     }
 
@@ -139,14 +171,15 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
         super.onSaveInstanceState(outState);
         if (mRecipeStepsArrayList != null) {
             outState.putParcelable(EXTRA_RECIPES_STEP, Parcels.wrap(mRecipeStepsArrayList));
-            outState.putString(EXTRA_RECIPE_NAME,mRecipeName);
-            outState.putInt(EXTRA_STEP_POSITION,mRecipeStepPosition);
+            outState.putString(EXTRA_RECIPE_NAME, mRecipeName);
+            outState.putInt(EXTRA_STEP_POSITION, mRecipeStepPosition);
         }
+        updateStartPosition();
 
-        if (mExoPlayer != null) {
-            outState.putBoolean(RECIPE_STEP_VIDEO_STATE, mExoPlayer.getPlayWhenReady());
-            outState.putLong(RECIPE_STEP_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
-        }
+        outState.putBoolean(RECIPE_STEP_VIDEO_STATE, mPlayWhenReady);
+        outState.putLong(RECIPE_STEP_VIDEO_POSITION, mCurrentPlayPosition);
+        outState.putInt(RECIPE_STEP_VIDEO_WINDOW,mPlayStartWindow);
+
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -165,7 +198,10 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(mPlayWhenReady);
-            mExoPlayer.seekTo(mCurrentPlayPosition);
+            boolean haveStartPosition = mPlayStartWindow != C.INDEX_UNSET;
+            if (haveStartPosition) {
+                mExoPlayer.seekTo(mPlayStartWindow, mCurrentPlayPosition);
+            }
             mPlayerView.setPlayer(mExoPlayer);
         }
     }
@@ -271,9 +307,22 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
 //        mMediaSession.setActive(false);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
     private void releasePlayer() {
 
         if (mExoPlayer != null) {
+            updateStartPosition();
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;

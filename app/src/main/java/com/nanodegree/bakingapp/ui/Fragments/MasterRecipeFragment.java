@@ -45,6 +45,7 @@ import butterknife.ButterKnife;
 import static com.android.volley.Request.Method.GET;
 import static com.nanodegree.bakingapp.model.Contracts.CONTENT_URL;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES;
+import static com.nanodegree.bakingapp.ui.Activities.HomeActivity.mSimpleIdlingResource;
 import static com.nanodegree.bakingapp.util.shareMethod.isOnline;
 import static com.nanodegree.bakingapp.util.shareMethod.showSnackBar;
 import static com.nanodegree.bakingapp.widget.RecipeIngredientWidget.updateRecipeIngredientWidgets;
@@ -67,6 +68,7 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
     private int position = 0;
     private List<RecipesResult> data = new ArrayList<>();
     private final String TAG = MasterRecipeFragment.class.getSimpleName();
+
 
 
     public MasterRecipeFragment() {
@@ -144,10 +146,20 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
         String url = CONTENT_URL;
         Log.d(TAG, "getRecipe: url > " + url);
 
+        if (mSimpleIdlingResource != null) {
+            mSimpleIdlingResource.setIdleState(false);
+        }
+
+
         final StringRequest request = new StringRequest(GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        if (mSimpleIdlingResource != null) {
+                            mSimpleIdlingResource.setIdleState(true);
+                        }
+
 
                         Log.d(TAG, "getRecipe: response > " + response);
 
@@ -188,6 +200,9 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getContext(), getString(R.string.sorry_error_happen),
                         Toast.LENGTH_SHORT).show();
                 mInternetLayout.setVisibility(View.VISIBLE);
+                if (mSimpleIdlingResource != null) {
+                    mSimpleIdlingResource.setIdleState(true);
+                }
             }
         });
         MySingleton.getInstance(getContext()).addToRequestQueue(request);
@@ -226,4 +241,5 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
             Log.d(TAG, "onSaveInstanceState > " + data.size());
         }
     }
+
 }
