@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapter.ViewHolder>  {
+public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapter.ViewHolder> {
 
     private ArrayList<RecipesResult> mRecipeNameList;
     private OnItemClickListener onItemClickListener;
@@ -42,9 +42,11 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         String mRecipeName = mRecipeNameList.get(position).getRecipeName();
+
         int mRecipeImage = RecipeImages.getImageDrawable(mRecipeName);
+        GlideApp.with(holder.mRecipeImageView.getContext()).load(mRecipeNameList.get(position).getRecipeImageUrl()).error(mRecipeImage).into(holder.mRecipeImageView);
         holder.mRecipeNameTextView.setText(mRecipeName);
-        GlideApp.with(holder.mRecipeImageView.getContext()).load(mRecipeImage).into(holder.mRecipeImageView);
+
 
     }
 
@@ -56,7 +58,6 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.recipe_image_view)
         ImageView mRecipeImageView;
@@ -66,7 +67,7 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override

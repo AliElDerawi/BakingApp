@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,12 +52,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.fab)
     FloatingActionButton mFabButton;
+    @BindView(R.id.recipe_detail_layout)
+    NestedScrollView mNestedScrollView;
+
 
     private RecipesResult data;
     private boolean mTabletLayout;
     private int mCurrentStepPosition = 0;
+    private int[] mScrollPosition;
 
     private final String TAG = RecipeDetailActivity.class.getSimpleName();
+    private final String SCROLL_SAVE_STATE = "scrollSaveState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
         if (savedInstanceState != null){
             mCurrentStepPosition = savedInstanceState.getInt(EXTRA_STEP_POSITION);
+            mScrollPosition = savedInstanceState.getIntArray(SCROLL_SAVE_STATE);
         }
 
         if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPES)) {
@@ -90,6 +97,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
 
             mRecipeNameTextView.setText(data.getRecipeName());
             mRecipeServingTextView.setText(String.valueOf(data.getRecipeServing()));
+
+            if (mScrollPosition != null)
+                mNestedScrollView.scrollTo(mScrollPosition[0],mScrollPosition[1]);
 
             if (!mTabletLayout) {
                 prepareScreenTitle();
@@ -168,5 +178,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
         if (mCurrentStepPosition != 0){
             outState.putInt(EXTRA_STEP_POSITION,mCurrentStepPosition);
         }
+
+        // TODO It's not necessary to save scrollview state, setting id for mCoordinate Layout save scroll state automatically
+        outState.putIntArray(SCROLL_SAVE_STATE,
+                new int[]{mNestedScrollView.getScrollX(),
+                        mNestedScrollView.getScrollY()});
+
+        Log.d(TAG,"onSaveInstanceState" + mNestedScrollView.getScrollX() + " " + mNestedScrollView.getScrollY());
     }
 }
