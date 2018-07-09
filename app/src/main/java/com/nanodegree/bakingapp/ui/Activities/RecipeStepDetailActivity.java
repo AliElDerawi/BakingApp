@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.request.RecipeStepsRequest;
 import com.nanodegree.bakingapp.ui.Fragments.ItemRecipeStepFragment;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.parceler.Parcels;
 
@@ -50,6 +51,15 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_recipe_step_detail);
 
         ButterKnife.bind(this);
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(getApplication());
+
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -75,13 +85,19 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
             }
 
             getSupportActionBar().setTitle(mRecipeStepsArrayList.get(mCurrentStepPosition).getStepShortDescription());
-            ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
-            itemRecipeStepFragment.setRecipeStepsArrayList(mRecipeStepsArrayList);
-            itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
-            itemRecipeStepFragment.setRecipeName(mRecipeName);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
-                    .commit();
+
+
+            if (savedInstanceState == null) {
+
+                Log.d(TAG,"savedInstanceState");
+                ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
+                itemRecipeStepFragment.setRecipeStepsArrayList(mRecipeStepsArrayList);
+                itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
+                itemRecipeStepFragment.setRecipeName(mRecipeName);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
+                        .commit();
+            }
         }
     }
 

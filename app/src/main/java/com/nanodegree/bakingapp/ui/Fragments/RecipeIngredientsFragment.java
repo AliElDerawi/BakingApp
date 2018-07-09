@@ -15,10 +15,14 @@ import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.request.RecipeIngredientsRequest;
 import com.nanodegree.bakingapp.ui.Adapters.RecipeIngredientsAdapter;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPE_INGREDIENTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +47,9 @@ public class RecipeIngredientsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         ButterKnife.bind(this, view);
+        if (savedInstanceState != null){
+            mRecipeIngredientArrayList = Parcels.unwrap(savedInstanceState.getParcelable(EXTRA_RECIPE_INGREDIENTS));
+        }
         return view;
     }
 
@@ -58,5 +65,12 @@ public class RecipeIngredientsFragment extends Fragment {
 
     public void setRecipeIngredientsArrayList(ArrayList<RecipeIngredientsRequest> mRecipeIngredientsArrayList){
         this.mRecipeIngredientArrayList = mRecipeIngredientsArrayList;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRecipeIngredientArrayList != null)
+        outState.putParcelable(EXTRA_RECIPE_INGREDIENTS, Parcels.wrap(mRecipeIngredientArrayList));
     }
 }

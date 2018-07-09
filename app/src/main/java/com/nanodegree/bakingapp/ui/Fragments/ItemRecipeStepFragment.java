@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,6 +111,7 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
         } else {
             clearStartPosition();
         }
+        Log.d(TAG,"onCreateView");
         return view;
 
     }
@@ -134,8 +136,7 @@ public class ItemRecipeStepFragment extends Fragment implements ExoPlayer.EventL
         mRecipeStepShortDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepShortDescription());
         mRecipeStepFullDescriptionTextView.setText(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepDescription());
 
-
-        if (mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl().isEmpty()) {
+        if (TextUtils.isEmpty(mRecipeStepsArrayList.get(mRecipeStepPosition).getStepVideoUrl())) {
             mRecipeNoVideoTextView.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.GONE);
             mRecipeStepThumbnail.setVisibility(View.VISIBLE);
