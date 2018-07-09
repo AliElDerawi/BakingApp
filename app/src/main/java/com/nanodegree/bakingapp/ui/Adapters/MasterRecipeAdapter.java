@@ -44,6 +44,7 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
         String mRecipeName = mRecipeNameList.get(position).getRecipeName();
 
         int mRecipeImage = RecipeImages.getImageDrawable(mRecipeName);
+//        TODO When using Glide try to use with(this) as possible, if couldn't use (getContext)
         GlideApp.with(holder.mRecipeImageView.getContext()).load(mRecipeNameList.get(position).getRecipeImageUrl()).error(mRecipeImage).into(holder.mRecipeImageView);
         holder.mRecipeNameTextView.setText(mRecipeName);
 

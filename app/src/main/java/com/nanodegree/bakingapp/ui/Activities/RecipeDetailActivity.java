@@ -22,6 +22,7 @@ import com.nanodegree.bakingapp.ui.Fragments.RecipeIngredientsFragment;
 import com.nanodegree.bakingapp.ui.Fragments.RecipeStepsFragment;
 import com.nanodegree.bakingapp.util.GlideApp;
 import com.nanodegree.bakingapp.util.RecipeImages;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.parceler.Parcels;
 
@@ -69,6 +70,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
         ButterKnife.bind(this);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
+
+        // Normal app init code...
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -76,57 +83,63 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
             mTabletLayout = true;
         }
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mCurrentStepPosition = savedInstanceState.getInt(EXTRA_STEP_POSITION);
             mScrollPosition = savedInstanceState.getIntArray(SCROLL_SAVE_STATE);
         }
 
         if (getIntent() != null && getIntent().hasExtra(EXTRA_RECIPES)) {
             data = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_RECIPES));
-            Log.d(TAG,"data>:" + data.toString());
+            Log.d(TAG, "data>:" + data.toString());
 
-            ArrayList<RecipeIngredientsRequest> mRecipeIngredientArrayList = data.getIngredientsRequest();
-            RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
-            recipeIngredientsFragment.setRecipeIngredientsArrayList(mRecipeIngredientArrayList);
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_ingredients_fragment, recipeIngredientsFragment).commit();
+            if (savedInstanceState == null) {
 
-            ArrayList<RecipeStepsRequest> mRecipeStepsArrayList = data.getStepsRequest();
-            RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
-            recipeStepsFragment.setStepRecipeStepArrayList(mRecipeStepsArrayList);
-            getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps_fragment, recipeStepsFragment).commit();
+
+                ArrayList<RecipeIngredientsRequest> mRecipeIngredientArrayList = data.getIngredientsRequest();
+                RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
+                recipeIngredientsFragment.setRecipeIngredientsArrayList(mRecipeIngredientArrayList);
+                getSupportFragmentManager().beginTransaction().add(R.id.recipe_ingredients_fragment, recipeIngredientsFragment).commit();
+
+                ArrayList<RecipeStepsRequest> mRecipeStepsArrayList = data.getStepsRequest();
+                RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
+                recipeStepsFragment.setStepRecipeStepArrayList(mRecipeStepsArrayList);
+                getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps_fragment, recipeStepsFragment).commit();
+
+            }
 
             mRecipeNameTextView.setText(data.getRecipeName());
             mRecipeServingTextView.setText(String.valueOf(data.getRecipeServing()));
 
-            if (mScrollPosition != null)
-                mNestedScrollView.scrollTo(mScrollPosition[0],mScrollPosition[1]);
+                if (mScrollPosition != null)
+                    mNestedScrollView.scrollTo(mScrollPosition[0], mScrollPosition[1]);
 
-            if (!mTabletLayout) {
-                prepareScreenTitle();
-                int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
-                GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
-                mFabButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showSnackBar(view.getContext(),view,getResources().getString(R.string.fab_not_implemented));
-                    }
-                });
-            } else {
+                if (!mTabletLayout) {
+                    prepareScreenTitle();
+                    int mRecipeImage = RecipeImages.getImageDrawable(data.getRecipeName());
+                    GlideApp.with(this).load(mRecipeImage).into(mRecipeImageView);
+                    mFabButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showSnackBar(view.getContext(), view, getResources().getString(R.string.fab_not_implemented));
+                        }
+                    });
+                } else {
 //                mCollapsingToolbarLayout.setTitle(data.getRecipeName());
-                mFabButton.setVisibility(View.GONE);
-                getSupportActionBar().setTitle(data.getRecipeName());
-                mToolbar.setTitle(data.getRecipeName());
-                ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
-                itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
-                itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
-                itemRecipeStepFragment.setRecipeName(data.getRecipeName());
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
-                        .commit();
+                    mFabButton.setVisibility(View.GONE);
+                    getSupportActionBar().setTitle(data.getRecipeName());
+                    mToolbar.setTitle(data.getRecipeName());
+                    if (savedInstanceState == null) {
+                        ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
+                        itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
+                        itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
+                        itemRecipeStepFragment.setRecipeName(data.getRecipeName());
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
+                                .commit();
+                    }
+                }
             }
-
         }
-    }
 
     private void prepareScreenTitle() {
 
@@ -159,9 +172,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
             Intent forStepDetailIntent = new Intent(this, RecipeStepDetailActivity.class);
             forStepDetailIntent.putExtra(EXTRA_RECIPES_STEP, Parcels.wrap(data.getStepsRequest()));
             forStepDetailIntent.putExtra(EXTRA_RECIPE_NAME, data.getRecipeName());
-            forStepDetailIntent.putExtra(EXTRA_STEP_POSITION,mCurrentStepPosition);
+            forStepDetailIntent.putExtra(EXTRA_STEP_POSITION, mCurrentStepPosition);
             startActivity(forStepDetailIntent);
-        }else {
+        } else {
             ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
             itemRecipeStepFragment.setRecipeStepsArrayList(data.getStepsRequest());
             itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
@@ -175,8 +188,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mCurrentStepPosition != 0){
-            outState.putInt(EXTRA_STEP_POSITION,mCurrentStepPosition);
+        if (mCurrentStepPosition != 0) {
+            outState.putInt(EXTRA_STEP_POSITION, mCurrentStepPosition);
         }
 
         // TODO It's not necessary to save scrollview state, setting id for mCoordinate Layout save scroll state automatically
@@ -184,6 +197,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeSte
                 new int[]{mNestedScrollView.getScrollX(),
                         mNestedScrollView.getScrollY()});
 
-        Log.d(TAG,"onSaveInstanceState" + mNestedScrollView.getScrollX() + " " + mNestedScrollView.getScrollY());
+        Log.d(TAG, "onSaveInstanceState" + mNestedScrollView.getScrollX() + " " + mNestedScrollView.getScrollY());
     }
 }

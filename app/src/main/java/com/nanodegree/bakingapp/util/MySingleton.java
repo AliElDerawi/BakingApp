@@ -13,7 +13,7 @@ public class MySingleton {
     private static MySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
+    private Context mCtx;
 
     private MySingleton(Context context) {
         mCtx = context;

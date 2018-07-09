@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.RecipesResult;
@@ -46,6 +45,7 @@ import static com.android.volley.Request.Method.GET;
 import static com.nanodegree.bakingapp.model.Contracts.CONTENT_URL;
 import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES;
 import static com.nanodegree.bakingapp.ui.Activities.HomeActivity.mSimpleIdlingResource;
+import static com.nanodegree.bakingapp.util.Json.deSerializeList;
 import static com.nanodegree.bakingapp.util.shareMethod.isOnline;
 import static com.nanodegree.bakingapp.util.shareMethod.showSnackBar;
 import static com.nanodegree.bakingapp.widget.RecipeIngredientWidget.updateRecipeIngredientWidgets;
@@ -68,7 +68,6 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
     private int position = 0;
     private List<RecipesResult> data = new ArrayList<>();
     private final String TAG = MasterRecipeFragment.class.getSimpleName();
-
 
 
     public MasterRecipeFragment() {
@@ -168,12 +167,13 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
                         try {
                             JSONArray jsonArray = new JSONArray(response);
 
-                            data = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<RecipesResult>>() {
+                            data = deSerializeList(jsonArray.toString(), new TypeToken<ArrayList<RecipesResult>>() {
                             }.getType());
-                            Log.d(TAG, "Your Recipe :" + data.size());
 
-                            if (data.size() > 0) {
 
+                            if (data != null && data.size() > 0) {
+
+                                Log.d(TAG, "Your Recipe :" + data.size());
                                 completeRecyclerView();
                                 updateWidget(0);
 
@@ -205,7 +205,7 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
                 }
             }
         });
-        MySingleton.getInstance(getContext()).addToRequestQueue(request);
+        MySingleton.getInstance(this.getContext()).addToRequestQueue(request);
 
     }
 
@@ -221,7 +221,7 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    private void updateWidget(int position){
+    private void updateWidget(int position) {
         if (getContext() != null) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext(), RecipeIngredientWidget.class));

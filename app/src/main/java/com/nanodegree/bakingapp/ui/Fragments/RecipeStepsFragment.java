@@ -17,10 +17,14 @@ import com.nanodegree.bakingapp.model.request.RecipeStepsRequest;
 import com.nanodegree.bakingapp.ui.Adapters.RecipeStepsAdapter;
 import com.nanodegree.bakingapp.util.OnItemClickListener;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.nanodegree.bakingapp.model.Contracts.EXTRA_RECIPES_STEP;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +69,9 @@ public class RecipeStepsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         ButterKnife.bind(this, view);
+        if (savedInstanceState != null){
+            mRecipeStepsArrayList = Parcels.unwrap(savedInstanceState.getParcelable(EXTRA_RECIPES_STEP));
+        }
         return view;
     }
 
@@ -86,5 +93,13 @@ public class RecipeStepsFragment extends Fragment {
 
     public void setStepRecipeStepArrayList(ArrayList<RecipeStepsRequest> mRecipeStepsArrayList) {
         this.mRecipeStepsArrayList = mRecipeStepsArrayList;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRecipeStepsArrayList != null)
+            outState.putParcelable(EXTRA_RECIPES_STEP, Parcels.wrap(mRecipeStepsArrayList));
+
     }
 }
