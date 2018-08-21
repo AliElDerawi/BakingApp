@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,7 @@ import com.nanodegree.bakingapp.model.RecipesResult;
 import com.nanodegree.bakingapp.ui.Activities.RecipeDetailActivity;
 import com.nanodegree.bakingapp.ui.Adapters.MasterRecipeAdapter;
 import com.nanodegree.bakingapp.util.MySingleton;
-import com.nanodegree.bakingapp.util.OnItemClickListener;
+import com.nanodegree.bakingapp.util.OnImageItemClickListener;
 import com.nanodegree.bakingapp.widget.RecipeIngredientWidget;
 
 import org.json.JSONArray;
@@ -122,14 +123,26 @@ public class MasterRecipeFragment extends Fragment implements View.OnClickListen
 
     private void completeRecyclerView() {
 
-        MasterRecipeAdapter masterRecipeAdapter = new MasterRecipeAdapter((ArrayList<RecipesResult>) data, new OnItemClickListener() {
+        MasterRecipeAdapter masterRecipeAdapter = new MasterRecipeAdapter((ArrayList<RecipesResult>) data, new OnImageItemClickListener() {
+
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(int position, View view) {
                 updateWidget(position);
                 Intent forRecipeDetailActivity = new Intent(getContext(), RecipeDetailActivity.class);
                 RecipesResult recipesResult = data.get(position);
                 forRecipeDetailActivity.putExtra(EXTRA_RECIPES, Parcels.wrap(recipesResult));
-                startActivity(forRecipeDetailActivity);
+                Bundle bundle = new Bundle();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    if (getActivity() != null) {
+                        bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                view,
+                                view.getTransitionName()
+                        ).toBundle();
+
+                        Log.d(TAG,"makeSceneTransitionAnimation: " + bundle);
+                    }
+                }
+                startActivity(forRecipeDetailActivity, bundle);
             }
         });
 

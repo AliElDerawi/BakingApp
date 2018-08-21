@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activities.HomeActivity">
+    tools:context=".ui.Activities.HomeActivity"
+
+    >
 
     <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.nanodegree.bakingapp.ui.Fragments.MasterRecipeFragment"
         android:id="@+id/master_recipe_fragment"
-        />
+        android:name="com.nanodegree.bakingapp.ui.Fragments.MasterRecipeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>

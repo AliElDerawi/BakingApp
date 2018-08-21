@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.RecipesResult;
 import com.nanodegree.bakingapp.util.GlideApp;
-import com.nanodegree.bakingapp.util.OnItemClickListener;
+import com.nanodegree.bakingapp.util.OnImageItemClickListener;
 import com.nanodegree.bakingapp.util.RecipeImages;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
 public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapter.ViewHolder> {
 
     private ArrayList<RecipesResult> mRecipeNameList;
-    private OnItemClickListener onItemClickListener;
+    private OnImageItemClickListener onItemClickListener;
 
 
-    public MasterRecipeAdapter(ArrayList<RecipesResult> mRecipeNameList, OnItemClickListener onItemClickListener) {
+    public MasterRecipeAdapter(ArrayList<RecipesResult> mRecipeNameList, OnImageItemClickListener onItemClickListener) {
         this.mRecipeNameList = mRecipeNameList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -44,7 +44,7 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
         String mRecipeName = mRecipeNameList.get(position).getRecipeName();
 
         int mRecipeImage = RecipeImages.getImageDrawable(mRecipeName);
-//        TODO When using Glide try to use with(this) as possible, if couldn't use (getContext)
+//
         GlideApp.with(holder.mRecipeImageView.getContext()).load(mRecipeNameList.get(position).getRecipeImageUrl()).error(mRecipeImage).into(holder.mRecipeImageView);
         holder.mRecipeNameTextView.setText(mRecipeName);
 
@@ -73,7 +73,7 @@ public class MasterRecipeAdapter extends RecyclerView.Adapter<MasterRecipeAdapte
 
         @Override
         public void onClick(View view) {
-            onItemClickListener.onItemClick(getAdapterPosition());
+            onItemClickListener.onItemClick(getAdapterPosition(),view);
         }
     }
 }

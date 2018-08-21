@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="two_pane_width">250dp</dimen>
+    <dimen name="side_margin">80dp</dimen>
+    <dimen name="keyline_1">24dp</dimen>
+    <dimen name="keyline_2">80dp</dimen>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.Fragments.MasterRecipeFragment"
-    android:padding="8dp"
+    android:padding="@dimen/side_margin"
     android:background="@color/colorScreen"
     android:id="@+id/background_layout"
     >

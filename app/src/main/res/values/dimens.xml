@@ -2,6 +2,9 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">280dp</dimen>
+    <dimen name="side_margin">16dp</dimen>
+    <dimen name="keyline_1">16dp</dimen>
+    <dimen name="keyline_2">72dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

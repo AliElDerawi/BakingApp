@@ -3,6 +3,7 @@ package com.nanodegree.bakingapp.ui.Activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.widget.RelativeLayout;
 import com.nanodegree.bakingapp.R;
 import com.nanodegree.bakingapp.model.request.RecipeStepsRequest;
 import com.nanodegree.bakingapp.ui.Fragments.ItemRecipeStepFragment;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.parceler.Parcels;
 
@@ -52,12 +52,6 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
 
         ButterKnife.bind(this);
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(getApplication());
 
 
         setSupportActionBar(mToolbar);
@@ -90,13 +84,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
             if (savedInstanceState == null) {
 
                 Log.d(TAG,"savedInstanceState");
-                ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
-                itemRecipeStepFragment.setRecipeStepsArrayList(mRecipeStepsArrayList);
-                itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
-                itemRecipeStepFragment.setRecipeName(mRecipeName);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
-                        .commit();
+                setupItemRecipeStepFragment();
             }
         }
     }
@@ -139,13 +127,22 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements View.
 
         mCurrentStepPosition = mCurrentStepPosition + step;
         getSupportActionBar().setTitle(mRecipeStepsArrayList.get(mCurrentStepPosition).getStepShortDescription());
+       setupItemRecipeStepFragment();
+    }
+
+    private void setupItemRecipeStepFragment(){
         ItemRecipeStepFragment itemRecipeStepFragment = new ItemRecipeStepFragment();
         itemRecipeStepFragment.setRecipeStepsArrayList(mRecipeStepsArrayList);
         itemRecipeStepFragment.setRecipeStepPosition(mCurrentStepPosition);
         itemRecipeStepFragment.setRecipeName(mRecipeName);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.recipe_step_detail_fragment, itemRecipeStepFragment)
-                .commit();
+        replaceFragment(itemRecipeStepFragment);
+    }
+
+
+
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.recipe_steps_fragment, fragment).commit();
+
     }
 
     @Override
