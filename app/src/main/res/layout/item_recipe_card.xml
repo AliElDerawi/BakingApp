@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    app:cardCornerRadius="8dp"
-    app:cardUseCompatPadding="true"
     android:background="#7dffffff"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:transitionName="@string/recipe_image_transition_name"
+    tools:targetApi="lollipop"
+    app:cardUseCompatPadding="true"
     >
-        <LinearLayout
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/recipe_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="TODO"
+            android:scaleType="centerCrop"
+            android:src="@drawable/recipe_nutella_pie"
+            />
+
+
+        <TextView
+            android:id="@+id/recipe_name_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/recipe_image_view"
-                android:scaleType="centerCrop"
-                android:src="@drawable/recipe_nutella_pie"
-                android:contentDescription="TODO"
-                />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recipe_name_text_view"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textColor="@color/colorPrimaryLight"
-                android:text="@string/recipe_name"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:background="#7dffffff"
-                />
-        </LinearLayout>
+            android:background="#7dffffff"
+            android:gravity="center"
+            android:text="@string/recipe_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </android.support.v7.widget.CardView>
